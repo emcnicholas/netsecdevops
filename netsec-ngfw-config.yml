@@ -1,0 +1,10 @@
+- hosts: ftd
+  connection: httpapi
+  tasks:
+    - name: Create a TCP port for PostgreSQL
+      ftd_configuration:
+        operation: upsertTCPPortObject
+        data:
+          name: PostgreSQL port
+          port: '5432'
+          type: tcpportobject
