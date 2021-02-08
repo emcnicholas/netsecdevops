@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('SCM Checkout'){
             steps{
-                git credentialsId: 'github', url: 'https://github.com/emcnicholas/netsecdevops.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/emcnicholas/netsecdevops.git'
             }
         }
         stage('Execute Ansible'){
