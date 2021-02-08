@@ -6,5 +6,5 @@
         operation: upsertTCPPortObject
         data:
           name: PostgreSQL port
-          port: '5432'
+          port: '5437'
           type: tcpportobject
