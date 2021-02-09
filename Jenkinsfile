@@ -14,7 +14,7 @@ pipeline{
         }
         stage('Execute Ansible'){
             steps{
-                ansiblePlaybook become: true, colorized: true, disableHostKeyChecking: true, installation: 'ansible 2.9.17', inventory: 'hosts.yml', playbook: 'netsec-ngfw-config.yml'
+                ansiblePlaybook disableHostKeyChecking: true, installation: 'ansible 2.9.17', inventory: 'hosts.yml', playbook: 'netsec-ngfw-config.yml'
             }
         }
     }
