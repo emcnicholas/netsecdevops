@@ -1,31 +1,9 @@
 - hosts: all
   connection: httpapi
   tasks:
-    - name: HTTPS
+    - name: TEST
       ftd_configuration:
         operation: upsertTCPPortObject
         data:
-          name: HTTPS
-          port: '443'
-          type: tcpportobject
-    - name: k8_dashboard
-      ftd_configuration:
-        operation: upsertTCPPortObject
-        data:
-          name: k8_dashboard
-          port: '10443'
-          type: tcpportobject
-    - name: k8s_api
-      ftd_configuration:
-        operation: upsertTCPPortObject
-        data:
-          name: k8s_api
-          port: '16443'
-          type: tcpportobject
-    - name: my-python-app
-      ftd_configuration:
-        operation: upsertTCPPortObject
-        data:
-          name: my-python-app
-          port: '30677'
-          type: tcpportobject
+          name: TEST
+          port: '888'
