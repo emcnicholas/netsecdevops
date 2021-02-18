@@ -1,9 +1,38 @@
 - hosts: all
   connection: httpapi
   tasks:
-    - name: TEST
+    - name: PostgreSQL
       ftd_configuration:
         operation: upsertTCPPortObject
         data:
-          name: TEST
-          port: '888'
+          name: PostgreSQL port
+          port: '5433'
+          type: tcpportobject
+    - name: HTTPS
+      ftd_configuration:
+        operation: upsertTCPPortObject
+        data:
+          name: HTTPS
+          port: '443'
+          type: tcpportobject
+    - name: k8_dashboard
+      ftd_configuration:
+        operation: upsertTCPPortObject
+        data:
+          name: k8_dashboard
+          port: '10443'
+          type: tcpportobject
+    - name: k8s_api
+      ftd_configuration:
+        operation: upsertTCPPortObject
+        data:
+          name: k8s_api
+          port: '16443'
+          type: tcpportobject
+    - name: my-python-app
+      ftd_configuration:
+        operation: upsertTCPPortObject
+        data:
+          name: my-python-app
+          port: '30677'
+          type: tcpportobject
