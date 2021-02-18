@@ -1,13 +1,6 @@
 - hosts: all
   connection: httpapi
   tasks:
-    - name: PostgreSQL
-      ftd_configuration:
-        operation: upsertTCPPortObject
-        data:
-          name: PostgreSQL port
-          port: '5433'
-          type: tcpportobject
     - name: HTTPS
       ftd_configuration:
         operation: upsertTCPPortObject
