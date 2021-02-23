@@ -1,0 +1,8 @@
+- hosts: k8s
+  tasks:
+    - name: Create a k8s namespace
+      k8s:
+        name: my-python-app
+        api_version: v1
+        kind: Namespace
+        state: present
