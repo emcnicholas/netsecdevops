@@ -6,13 +6,12 @@ pipeline{
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/emcnicholas/netsecdevops.git'
             }
         }
-        stage('Build App'){
-            agent {
-                label 'k8s'
-                }
-            steps {
-                ansiblePlaybook installation: 'ansible 2.9.17', inventory: 'k8s_hosts', playbook: 'my-python-app.yml'
-            }
+        stage('Deploy App') {
+             steps {
+                 script {
+                     kubernetesDeploy configs: 'my-python-app-deployment.yml', kubeConfig: [path: ''], kubeconfigId: 'microk8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+                 }
+             }
         }
         stage('Build FW'){
             steps{
