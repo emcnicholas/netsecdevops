@@ -6,7 +6,15 @@ pipeline{
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/emcnicholas/netsecdevops.git'
             }
         }
-        stage('Execute Ansible'){
+        stage('Build App'){
+            agent {
+                label 'k8s'
+                }
+            steps {
+                ansiblePlaybook installation: 'ansible 2.9.17', playbook: 'my-python-app.yml'
+            }
+        }   
+        stage('Build FW'){
             steps{
                 ansiblePlaybook disableHostKeyChecking: true, installation: 'ansible 2.9.17', inventory: 'hosts.yml', playbook: 'netsec-ngfw-config.yml'
             }

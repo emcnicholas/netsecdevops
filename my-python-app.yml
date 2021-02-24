@@ -1,4 +1,4 @@
-- hosts: k8s
+- hosts: localhost
   tasks:
     - name: Create a k8s namespace
       k8s:
