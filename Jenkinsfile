@@ -11,9 +11,9 @@ pipeline{
                 label 'k8s'
                 }
             steps {
-                ansiblePlaybook installation: 'ansible 2.9.17', playbook: 'my-python-app.yml'
+                ansiblePlaybook installation: 'ansible 2.9.17', inventory: 'k8s_hosts', playbook: 'my-python-app.yml'
             }
-        }   
+        }
         stage('Build FW'){
             steps{
                 ansiblePlaybook disableHostKeyChecking: true, installation: 'ansible 2.9.17', inventory: 'hosts.yml', playbook: 'netsec-ngfw-config.yml'
