@@ -6,13 +6,6 @@ pipeline{
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/emcnicholas/netsecdevops.git'
             }
         }
-        stage('Deploy App') {
-             steps {
-                 script {
-                     kubernetesDeploy configs: 'my-python-app-deployment.yml', kubeConfig: [path: ''], kubeconfigId: 'microk8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-                 }
-             }
-        }
         stage('Build FW'){
             steps{
                 ansiblePlaybook disableHostKeyChecking: true, installation: 'ansible 2.9.17', inventory: 'hosts.yml', playbook: 'netsec-ngfw-config.yml'
