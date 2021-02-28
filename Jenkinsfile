@@ -6,11 +6,13 @@ pipeline{
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/emcnicholas/netsecdevops.git'
             }
         }
-        stage('Build FW'){
-            steps{
-                ansiblePlaybook disableHostKeyChecking: true, installation: 'ansible 2.9.17', inventory: 'hosts.yml', playbook: 'netsec-ngfw-config.yml'
+        stage('Build NGFW') {
+            agent {
+                docker {
+                    image 'ciscodevnet/ftd-ansible'
+                    args '-v $(pwd):/ftd-ansible/playbooks -v $(pwd)/hosts.yml:/etc/ansible/hosts playbooks/netsec-ngfw-config.yml'
+                }
             }
-        }
         stage('Test URL'){
             steps{
                 httpRequest ignoreSslErrors: true, responseHandle: 'NONE', url: 'http://54.237.88.112:30677', wrapAsMultipart: false
