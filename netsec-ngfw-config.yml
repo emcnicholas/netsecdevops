@@ -27,7 +27,7 @@
         register_as: "outside_int"
       register: return
     - debug:
-        var: outside_interface
+        var: outside_int
     - name: Inside Interface
       ftd_configuration:
         operation: upsertPhysicalInterface
@@ -53,7 +53,7 @@
         register_as: "inside_int"
       register: return
     - debug:
-        var: insidd_int
+        var: inside_int
 
     # NETWORK OBJECTS
     - name: Remote Site Host
@@ -67,8 +67,6 @@
           type: "networkobject"
         register_as: "remote_site"
       register: return
-    - debug:
-        var: remote_site
     - name: K8s Cluster Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -81,7 +79,7 @@
         registers_as: "K8s_Clusters"
       register: return
     - debug:
-        var: K8s_Cluster
+        var: K8s_Clusters
     - name: K8s Nat Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -107,8 +105,6 @@
           type: "tcpportobject"
         register_as: "k8s_api"
       register: return
-    - debug:
-        var: k8s_api
     - name: My-Python-App Port
       ftd_configuration:
         operation: 'upsertTCPPortObject'
@@ -119,8 +115,6 @@
           type: "tcpportobject"
         register_as: "my-python-app"
       register: return
-    - debug:
-        var: my-python-app
 
     # NETWORK ADDRESS TRANSLATION
     - name: Get Object NAT Policy
@@ -136,7 +130,7 @@
         data:
           name: "K8s_Nat"
           sourceInterface: "{{ inside_int[0] }}"
-          destinationInterface: "{{ outside[0] }}"
+          destinationInterface: "{{ outside_int[0] }}"
           natType: "STATIC"
           netToNet: "false"
           noProxyArp: "false"
@@ -149,5 +143,5 @@
           interfaceInTranslatedNetwork: "false"
           type: "objectnatrule"
         path_params:
-          parentId: "a47ce008-fe55-11e4-8e99-4dd96c3782ed"
+          parentId: {{ container_results[0][id]}}
 
