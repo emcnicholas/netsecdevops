@@ -124,12 +124,12 @@
     - debug:
         var: interface1
 
-    - name: Get Ojbect K8s_Clusters
+    - name: Get Ojbect K8s_Cluster
       ftd_configuration:
         operation: getNetworkObjectList
         filters:
-          name: K8s_Clusters
-        register_as: K8s_Clusters
+          name: K8s_Cluster
+        register_as: K8s_Cluster
     - debug:
         var: K8s_Cluster
 
