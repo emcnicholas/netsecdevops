@@ -48,6 +48,8 @@
           mode: ROUTED
           type: physicalinterface
       register: "inside_int"
+    - debug:
+        var: inside_int
 
     # NETWORK OBJECTS
     - name: Remote Site Host
