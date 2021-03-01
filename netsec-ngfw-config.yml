@@ -129,8 +129,8 @@
         operation: "upsertObjectNatRule"
         data:
           name: "K8s_Nat"
-          sourceInterface: "{{ inside_int[0] }}"
-          destinationInterface: "{{ outside_int[0] }}"
+          sourceInterface: inside_int
+          destinationInterface: outside_int
           natType: "STATIC"
           netToNet: "false"
           noProxyArp: "false"
