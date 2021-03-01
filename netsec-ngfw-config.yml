@@ -72,6 +72,10 @@
           subType: "HOST"
           value: "10.0.1.100"
           type: "networkobject"
+        register_as: "K8s_Cluster"
+      register: return
+    - debug:
+        var: K8s_Cluster
 
     - name: K8s Nat Host
       ftd_configuration:
@@ -82,6 +86,10 @@
           subType: "HOST"
           value: "10.0.0.11"
           type: "networkobject"
+        register_as: "K8s_ext"
+      register: return
+    - debug:
+        var: K8s_ext
 
   # SERVICE OBJECTS
     - name: K8s API Port
@@ -106,42 +114,6 @@
       register: return
 
     # NETWORK ADDRESS TRANSLATION
-    - name: Get a GigabitEthernet0/0 Interface
-      ftd_configuration:
-        operation: getPhysicalInterfaceList
-        filters:
-          hardwareName: GigabitEthernet0/0
-        register_as: interface0
-    - debug:
-        var: interface0
-
-    - name: Get a GigabitEthernet0/1 Interface
-      ftd_configuration:
-        operation: getPhysicalInterfaceList
-        filters:
-          hardwareName: GigabitEthernet0/1
-        register_as: interface1
-    - debug:
-        var: interface1
-
-    - name: Get Ojbect K8s_Cluster
-      ftd_configuration:
-        operation: getNetworkObjectList
-        filters:
-          name: K8s_Cluster
-        register_as: K8s_Cluster
-    - debug:
-        var: K8s_Cluster
-
-    - name: Get Ojbect K8s_ext
-      ftd_configuration:
-        operation: getNetworkObjectList
-        filters:
-          name: K8s_ext
-        register_as: K8s_ext
-    - debug:
-        var: K8s_ext
-
     - name: Get Object NAT Policy
       ftd_configuration:
         operation: getObjectNatRuleContainerList
@@ -155,19 +127,26 @@
         operation: "upsertObjectNatRule"
         data:
           name: "K8s_Nat"
-          sourceInterface: "{{ interface0[0] }}"
-          destinationInterface: "{{ interface0[0] }}"
+          sourceInterface:
+            name: "inside"
+            hardwareName: "GigabitEthernet0/0"
+            id: "{{ inside_int[0].id }}"
+            type: "physicalinterface"
+          destinationInterface:
+            name: "outside"
+            hardwareName: "GigabitEthernet0/1"
+            id: "{{ outside_int[0].id }}"
+            type: "physicalinterface"
           natType: "STATIC"
-          netToNet: "false"
-          noProxyArp: "false"
-          dns: "false"
-          interfaceIPv6: "false"
-          routeLookup: "false"
           enabled: "true"
-          originalNetwork: "{{ K8s_Cluster[0] }}"
-          translatedNetwork: "{{ K8s_ext[0] }}"
-          interfaceInTranslatedNetwork: "false"
+          originalNetwork:
+            name: "K8s_Cluster"
+            id: "{{ K8s_Cluster.id }}"
+            type: "networkobject"
+          translatedNetwork:
+            name: "K8s_Cluster"
+            id: "{{ K8s_ext.id }}"
+            type: "networkobject"
           type: "objectnatrule"
         path_params:
           parentId: "{{ container_results[0].id}}"
-
