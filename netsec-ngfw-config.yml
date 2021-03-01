@@ -142,7 +142,6 @@
             id: "{{ outside_int.id }}"
             type: "physicalinterface"
           natType: "STATIC"
-          enabled: "true"
           originalNetwork:
             name: "K8s_Cluster"
             id: "{{ K8s_Cluster.id }}"
