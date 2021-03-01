@@ -138,7 +138,7 @@
           interfaceIPv6: "false"
           routeLookup: "false"
           enabled: "true"
-          originalNetwork: "{{ K8s_Cluster }}"
+          originalNetwork: "K8s_Cluster"
           translatedNetwork: "{{ K8s_ext }}"
           interfaceInTranslatedNetwork: "false"
           type: "objectnatrule"
