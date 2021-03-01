@@ -110,9 +110,7 @@
     - name: Get Object NAT Policy
       ftd_configuration:
         operation: getObjectNatRuleContainerList
-        filters:
-          name: NGFW-Auto-NAT-Policy
-        register_as: container_results
+      register: container_results
     - name: K8S CLUSTER NAT
       ftd_configuration:
         operation: "upsertObjectNatRule"
