@@ -1,15 +1,41 @@
 - hosts: all
   connection: httpapi
 
+  # NETWORK OBJECTS
+
   tasks:
-    - name: addNetworkObject should create a new network
+    - name: Add Remote Site Host
       ftd_configuration:
         operation: 'addNetworkObject'
         data:
-          name: "ansible-test-network"
-          description: "Ansible Integration tests in action"
+          name: "remote_site"
+          description: "remote host"
           subType: "HOST"
-          value: "192.22.22.24"
+          value: "100.11.24.44"
           type: "networkobject"
-        register_as: "testObj"
+        register_as: "remote_site"
       register: result
+    - name: Add K8s Cluster Host
+        ftd_configuration:
+          operation: 'addNetworkObject'
+          data:
+            name: "K8s_Cluster"
+            description: "Kubernetes Cluster"
+            subType: "HOST"
+            value: "10.0.1.100"
+            type: "networkobject"
+          register_as: "K8s_Cluster"
+        register: result
+    - name: Add K8s Nat Host
+        ftd_configuration:
+          operation: 'addNetworkObject'
+          data:
+            name: "K8s_ext"
+            description: "Kubernetes Cluster Nat address"
+            subType: "HOST"
+            value: "10.0.0.11"
+            type: "networkobject"
+          register_as: "K8s_ext"
+        register: result
+
+        
