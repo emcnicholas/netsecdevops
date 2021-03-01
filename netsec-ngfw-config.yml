@@ -37,3 +37,15 @@
           type: "networkobject"
         register_as: "K8s_ext"
       register: result
+
+  # SERVICE OBJECTS
+    - name: K8s API Port
+      ftd_configuration:
+        operation: 'upsertTCPPortObject'
+        data:
+          name: "k8s_api"
+          description: "Kubernetes API port"
+          port: "16443"
+          type: "tcpportobject"
+        register_as: "k8s_api"
+      register: result
