@@ -24,7 +24,7 @@
           enabled: True
           mode: ROUTED
           type: physicalinterface
-        register_as: "outside interface"
+        register_as: "outside_int"
     - name: Inside Interface
       ftd_configuration:
         operation: upsertPhysicalInterface
@@ -47,7 +47,7 @@
           enabled: True
           mode: ROUTED
           type: physicalinterface
-        register_as: "inside interface"
+        register_as: "inside_int"
 
     # NETWORK OBJECTS
     - name: Remote Site Host
@@ -105,3 +105,33 @@
           type: "tcpportobject"
         register_as: "my-python-app"
       register: result
+
+    # NETWORK ADDRESS TRANSLATION
+    - name: Get Object NAT Policy
+      ftd_configuration:
+        operation: getObjectNatRuleContainer
+        filters:
+          name: NGFW-Auto-NAT-Policy
+        register_as: container_results
+    - name: K8S CLUSTER NAT
+      ftd_configuration:
+        operation: "upsertObjectNatRule"
+        data:
+          name: "K8s_Nat"
+          sourceInterface: "{{ inside_int[0] }}"
+          destinationInterface: "{{ outside[0] }}"
+          natType: "STATIC"
+          netToNet: "false"
+          noProxyArp: "false"
+          dns: "false"
+          interfaceIPv6: "false"
+          routeLookup: "false"
+          enabled: "true"
+          originalNetwork: "{{ K8s_Cluster }}"
+          translatedNetwork: "{{ K8s_ext }}"
+          interfaceInTranslatedNetwork: "false"
+          type: "objectnatrule"
+        path_params:
+          parentId: "{{ container_results[0].id }}"
+
+
