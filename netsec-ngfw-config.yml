@@ -24,7 +24,10 @@
           enabled: True
           mode: ROUTED
           type: physicalinterface
-      register: "outside_int"
+        register_as: "outside_int"
+      register: return
+    - debug:
+        var: outside_interface
     - name: Inside Interface
       ftd_configuration:
         operation: upsertPhysicalInterface
@@ -47,7 +50,10 @@
           enabled: True
           mode: ROUTED
           type: physicalinterface
-      register: "inside_int"
+        register_as: "inside_int"
+      register: return
+    - debug:
+        var: insidd_int
 
     # NETWORK OBJECTS
     - name: Remote Site Host
@@ -59,7 +65,10 @@
           subType: "HOST"
           value: "100.11.24.44"
           type: "networkobject"
-      register: "remote_site"
+        register_as: "remote_site"
+      register: return
+    - debug:
+        var: remote_site
     - name: K8s Cluster Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -69,7 +78,10 @@
           subType: "HOST"
           value: "10.0.1.100"
           type: "networkobject"
-      register: "K8s_Cluster"
+        registers_as: "K8s_Clusters"
+      register: return
+    - debug:
+        var: K8s_Cluster
     - name: K8s Nat Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -93,7 +105,10 @@
           description: "Kubernetes API port"
           port: "16443"
           type: "tcpportobject"
-      register: "k8s_api"
+        register_as: "k8s_api"
+      register: return
+    - debug:
+        var: k8s_api
     - name: My-Python-App Port
       ftd_configuration:
         operation: 'upsertTCPPortObject'
@@ -102,7 +117,10 @@
           description: "my-python-app service-node port"
           port: "16443"
           type: "tcpportobject"
-      register: "my-python-app"
+        register_as: "my-python-app"
+      register: return
+    - debug:
+        var: my-python-app
 
     # NETWORK ADDRESS TRANSLATION
     - name: Get Object NAT Policy
