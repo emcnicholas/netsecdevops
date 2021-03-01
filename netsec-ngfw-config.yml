@@ -1,9 +1,55 @@
 - hosts: all
   connection: httpapi
-
-  # NETWORK OBJECTS
-
   tasks:
+    # INTERFACES
+    - name: Outside Interface
+      ftd_configuration:
+        operation: upsertPhysicalInterface
+        data:
+          name: outside
+          hardwareName: GigabitEthernet0/1
+          monitorInterface: True
+          ipv4:
+            addressNull: False
+            defaultRouteUsingDHCP: False
+            dhcp: False
+            ipAddress:
+              ipAddress: 10.0.0.10
+              netmask: 255.255.255.0
+              standbyIpAddress: null
+              type: haipv4address
+            ipType: STATIC
+            type: interfaceipv4
+          mtu: 1500
+          enabled: True
+          mode: ROUTED
+          type: physicalinterface
+        register_as: "outside interface"
+    - name: Inside Interface
+      ftd_configuration:
+        operation: upsertPhysicalInterface
+        data:
+          name: inside
+          hardwareName: GigabitEthernet0/0
+          monitorInterface: True
+          ipv4:
+            addressNull: False
+            defaultRouteUsingDHCP: False
+            dhcp: False
+            ipAddress:
+              ipAddress: 10.0.1.10
+              netmask: 255.255.255.0
+              standbyIpAddress: null
+              type: haipv4address
+            ipType: STATIC
+            type: interfaceipv4
+          mtu: 1500
+          enabled: True
+          mode: ROUTED
+          type: physicalinterface
+        register_as: "inside interface"
+
+    # NETWORK OBJECTS
     - name: Remote Site Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -48,4 +94,14 @@
           port: "16443"
           type: "tcpportobject"
         register_as: "k8s_api"
+      register: result
+    - name: My-Python-App Port
+      ftd_configuration:
+        operation: 'upsertTCPPortObject'
+        data:
+          name: "my-python-app"
+          description: "my-python-app service-node port"
+          port: "16443"
+          type: "tcpportobject"
+        register_as: "my-python-app"
       register: result
