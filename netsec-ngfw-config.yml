@@ -106,6 +106,8 @@
       ftd_configuration:
         operation: getObjectNatRuleContainerList
       register: container_results
+    - debug:
+        var: container_results
     - name: K8S CLUSTER NAT
       ftd_configuration:
         operation: "upsertObjectNatRule"
