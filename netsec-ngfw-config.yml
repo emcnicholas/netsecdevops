@@ -129,8 +129,8 @@
         operation: "upsertObjectNatRule"
         data:
           name: "K8s_Nat"
-          sourceInterface: inside
-          destinationInterface: outside
+          sourceInterface: GigabitEthernet0/0
+          destinationInterface: GigabitEthernet0/1
           natType: "STATIC"
           netToNet: "false"
           noProxyArp: "false"
