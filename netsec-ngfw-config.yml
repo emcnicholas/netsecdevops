@@ -134,12 +134,12 @@
           sourceInterface:
             name: "inside"
             hardwareName: "GigabitEthernet0/0"
-            id: "{{ inside_int[0].id }}"
+            id: "{{ inside_int.id }}"
             type: "physicalinterface"
           destinationInterface:
             name: "outside"
             hardwareName: "GigabitEthernet0/1"
-            id: "{{ outside_int[0].id }}"
+            id: "{{ outside_int.id }}"
             type: "physicalinterface"
           natType: "STATIC"
           enabled: "true"
