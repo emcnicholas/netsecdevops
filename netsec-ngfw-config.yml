@@ -109,7 +109,7 @@
     # NETWORK ADDRESS TRANSLATION
     - name: Get Object NAT Policy
       ftd_configuration:
-        operation: getObjectNatRuleContainer
+        operation: getObjectNatRuleContainerList
         filters:
           name: NGFW-Auto-NAT-Policy
         register_as: container_results
