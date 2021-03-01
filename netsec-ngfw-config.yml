@@ -16,26 +16,24 @@
         register_as: "remote_site"
       register: result
     - name: Add K8s Cluster Host
-        ftd_configuration:
-          operation: 'addNetworkObject'
-          data:
-            name: "K8s_Cluster"
-            description: "Kubernetes Cluster"
-            subType: "HOST"
-            value: "10.0.1.100"
-            type: "networkobject"
-          register_as: "K8s_Cluster"
-        register: result
+      ftd_configuration:
+        operation: 'addNetworkObject'
+        data:
+          name: "K8s_Cluster"
+          description: "Kubernetes Cluster"
+          subType: "HOST"
+          value: "10.0.1.100"
+          type: "networkobject"
+        register_as: "K8s_Cluster"
+      register: result
     - name: Add K8s Nat Host
-        ftd_configuration:
-          operation: 'addNetworkObject'
-          data:
-            name: "K8s_ext"
-            description: "Kubernetes Cluster Nat address"
-            subType: "HOST"
-            value: "10.0.0.11"
-            type: "networkobject"
-          register_as: "K8s_ext"
-        register: result
-
-        
+      ftd_configuration:
+        operation: 'addNetworkObject'
+        data:
+          name: "K8s_ext"
+          description: "Kubernetes Cluster Nat address"
+          subType: "HOST"
+          value: "10.0.0.11"
+          type: "networkobject"
+        register_as: "K8s_ext"
+      register: result
