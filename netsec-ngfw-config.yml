@@ -13,8 +13,3 @@
           type: "networkobject"
         register_as: "testObj"
       register: result
-    - assert:
-        that:
-          - result.changed == true
-          - testObj['name'] == "ansible-test-network"
-          - testObj['subType'] == "HOST"
