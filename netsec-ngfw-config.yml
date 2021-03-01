@@ -26,6 +26,8 @@
           type: physicalinterface
         register_as: "outside_int"
       register: return
+    - debug:
+        var: outside_int
 
     - name: Inside Interface
       ftd_configuration:
@@ -51,6 +53,8 @@
           type: physicalinterface
         register_as: "inside_int"
       register: return
+    - debug:
+        var: inside_int
 
     # NETWORK OBJECTS
     - name: Remote Site Host
