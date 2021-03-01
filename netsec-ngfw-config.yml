@@ -108,7 +108,8 @@
     - name: Get Object NAT Policy
       ftd_configuration:
         operation: getObjectNatRuleContainerList
-      register: container_results
+        register_as: container_results
+      register: return
     - debug:
         var: container_results
     - name: K8S CLUSTER NAT
