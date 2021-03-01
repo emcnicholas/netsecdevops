@@ -48,8 +48,6 @@
           mode: ROUTED
           type: physicalinterface
       register: "inside_int"
-    - debug:
-        var: inside_int
 
     # NETWORK OBJECTS
     - name: Remote Site Host
@@ -81,7 +79,10 @@
           subType: "HOST"
           value: "10.0.0.11"
           type: "networkobject"
-      register: "K8s_ext"
+        register_as: "K8s_ext"
+      register: return
+    - debug:
+        var: K8s_ext
 
   # SERVICE OBJECTS
     - name: K8s API Port
