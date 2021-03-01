@@ -4,9 +4,9 @@
   # NETWORK OBJECTS
 
   tasks:
-    - name: Add Remote Site Host
+    - name: Remote Site Host
       ftd_configuration:
-        operation: 'addNetworkObject'
+        operation: 'upsertNetworkObject'
         data:
           name: "remote_site"
           description: "remote host"
@@ -15,9 +15,9 @@
           type: "networkobject"
         register_as: "remote_site"
       register: result
-    - name: Add K8s Cluster Host
+    - name: K8s Cluster Host
       ftd_configuration:
-        operation: 'addNetworkObject'
+        operation: 'upsertNetworkObject'
         data:
           name: "K8s_Cluster"
           description: "Kubernetes Cluster"
@@ -26,9 +26,9 @@
           type: "networkobject"
         register_as: "K8s_Cluster"
       register: result
-    - name: Add K8s Nat Host
+    - name: K8s Nat Host
       ftd_configuration:
-        operation: 'addNetworkObject'
+        operation: 'upsertNetworkObject'
         data:
           name: "K8s_ext"
           description: "Kubernetes Cluster Nat address"
