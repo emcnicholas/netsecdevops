@@ -10,7 +10,6 @@ pipeline{
             agent {
                 docker {
                     image 'ciscodevnet/ftd-ansible'
-                    args '-v $(pwd):/ftd-ansible/playbooks -v $(pwd)/hosts.yml:/etc/ansible/hosts playbooks/netsec-ngfw-config.yml'
                 }
             }
         stage('Test URL'){
