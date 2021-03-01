@@ -129,8 +129,8 @@
         operation: "upsertObjectNatRule"
         data:
           name: "K8s_Nat"
-          sourceInterface: "{{ inside_int }}"
-          destinationInterface: "{{ outside_int }}"
+          sourceInterface: inside
+          destinationInterface: outside
           natType: "STATIC"
           netToNet: "false"
           noProxyArp: "false"
@@ -138,8 +138,8 @@
           interfaceIPv6: "false"
           routeLookup: "false"
           enabled: "true"
-          originalNetwork: "K8s_Cluster"
-          translatedNetwork: "{{ K8s_ext }}"
+          originalNetwork: K8s_Cluster
+          translatedNetwork: K8s_ext
           interfaceInTranslatedNetwork: "false"
           type: "objectnatrule"
         path_params:
