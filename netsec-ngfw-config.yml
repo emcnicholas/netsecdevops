@@ -26,8 +26,7 @@
           type: physicalinterface
         register_as: "outside_int"
       register: return
-    - debug:
-        var: outside_int
+
     - name: Inside Interface
       ftd_configuration:
         operation: upsertPhysicalInterface
@@ -52,8 +51,6 @@
           type: physicalinterface
         register_as: "inside_int"
       register: return
-    - debug:
-        var: inside_int
 
     # NETWORK OBJECTS
     - name: Remote Site Host
@@ -115,6 +112,8 @@
         filters:
           hardwareName: GigabitEthernet0/0
         register_as: interface0
+    - debug:
+        var: interface0
 
     - name: Get a GigabitEthernet0/1 Interface
       ftd_configuration:
@@ -122,6 +121,8 @@
         filters:
           hardwareName: GigabitEthernet0/1
         register_as: interface1
+    - debug:
+        var: interface1
 
     - name: Get Ojbect K8s_Clusters
       ftd_configuration:
@@ -129,12 +130,17 @@
         filters:
           name: K8s_Clusters
         register_as: K8s_Clusters
+    - debug:
+        var: K8s_Cluster
+
     - name: Get Ojbect K8s_ext
       ftd_configuration:
         operation: getNetworkObjectList
         filters:
           name: K8s_ext
         register_as: K8s_ext
+    - debug:
+        var: K8s_ext
 
     - name: Get Object NAT Policy
       ftd_configuration:
