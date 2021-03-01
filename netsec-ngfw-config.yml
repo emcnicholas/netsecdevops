@@ -76,7 +76,7 @@
           subType: "HOST"
           value: "10.0.1.100"
           type: "networkobject"
-        registers_as: "K8s_Clusters"
+        register_as: "K8s_Clusters"
       register: return
     - debug:
         var: K8s_Clusters
