@@ -7,7 +7,7 @@ pipeline{
             }
         }
         stage('Build NGFW') {
-            steeps{
+            steps{
                 sh 'docker run -v $(pwd)/projects/ftd-anisble:/ftd-ansible/playbooks -v $(pwd)/projects/ftd-anisble/hosts.yml:/etc/ansible/hosts ciscodevnet/ftd-ansible playbooks/netsec-ngfw-config.yml'
             }
         }
