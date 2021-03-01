@@ -24,7 +24,7 @@
           enabled: True
           mode: ROUTED
           type: physicalinterface
-        register_as: "outside_int"
+      register: "outside_int"
     - name: Inside Interface
       ftd_configuration:
         operation: upsertPhysicalInterface
@@ -47,7 +47,7 @@
           enabled: True
           mode: ROUTED
           type: physicalinterface
-        register_as: "inside_int"
+      register: "inside_int"
 
     # NETWORK OBJECTS
     - name: Remote Site Host
@@ -59,8 +59,7 @@
           subType: "HOST"
           value: "100.11.24.44"
           type: "networkobject"
-        register_as: "remote_site"
-      register: result
+      register: "remote_site"
     - name: K8s Cluster Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -70,8 +69,7 @@
           subType: "HOST"
           value: "10.0.1.100"
           type: "networkobject"
-        register_as: "K8s_Cluster"
-      register: result
+      register: "K8s_Cluster"
     - name: K8s Nat Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -81,8 +79,7 @@
           subType: "HOST"
           value: "10.0.0.11"
           type: "networkobject"
-        register_as: "K8s_ext"
-      register: result
+      register: "K8s_ext"
 
   # SERVICE OBJECTS
     - name: K8s API Port
@@ -93,8 +90,7 @@
           description: "Kubernetes API port"
           port: "16443"
           type: "tcpportobject"
-        register_as: "k8s_api"
-      register: result
+      register: "k8s_api"
     - name: My-Python-App Port
       ftd_configuration:
         operation: 'upsertTCPPortObject'
@@ -103,8 +99,7 @@
           description: "my-python-app service-node port"
           port: "16443"
           type: "tcpportobject"
-        register_as: "my-python-app"
-      register: result
+      register: "my-python-app"
 
     # NETWORK ADDRESS TRANSLATION
     - name: Get Object NAT Policy
@@ -125,11 +120,10 @@
           interfaceIPv6: "false"
           routeLookup: "false"
           enabled: "true"
-          originalNetwork: "{{ K8s_Cluster }}"
-          translatedNetwork: "{{ K8s_ext }}"
+          originalNetwork: K8s_Cluster
+          translatedNetwork: K8s_ext
           interfaceInTranslatedNetwork: "false"
           type: "objectnatrule"
         path_params:
-          parentId: container_results[0].id
-
+          parentId: {{ container_results[0].id }}
 
