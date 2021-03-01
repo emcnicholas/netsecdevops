@@ -125,5 +125,5 @@
           interfaceInTranslatedNetwork: "false"
           type: "objectnatrule"
         path_params:
-          parentId: "{{ container_results[0].id }}"
+          parentId: "a47ce008-fe55-11e4-8e99-4dd96c3782ed"
 
