@@ -7,11 +7,10 @@ pipeline{
             }
         }
         stage('Build NGFW') {
-            agent {
-                docker {
-                    image 'ciscodevnet/ftd-ansible'
-                }
+            steeps{
+                sh 'docker run -v $(pwd)/projects/ftd-anisble:/ftd-ansible/playbooks -v $(pwd)/projects/ftd-anisble/hosts.yml:/etc/ansible/hosts ciscodevnet/ftd-ansible playbooks/netsec-ngfw-config.yml'
             }
+        }
         stage('Test URL'){
             steps{
                 httpRequest ignoreSslErrors: true, responseHandle: 'NONE', url: 'http://54.237.88.112:30677', wrapAsMultipart: false
