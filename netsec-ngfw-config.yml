@@ -65,8 +65,7 @@
           subType: "HOST"
           value: "100.11.24.44"
           type: "networkobject"
-        register_as: "remote_site"
-      register: return
+
     - name: K8s Cluster Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -76,10 +75,7 @@
           subType: "HOST"
           value: "10.0.1.100"
           type: "networkobject"
-        register_as: "K8s_Clusters"
-      register: return
-    - debug:
-        var: K8s_Clusters
+
     - name: K8s Nat Host
       ftd_configuration:
         operation: 'upsertNetworkObject'
@@ -89,10 +85,6 @@
           subType: "HOST"
           value: "10.0.0.11"
           type: "networkobject"
-        register_as: "K8s_ext"
-      register: return
-    - debug:
-        var: K8s_ext
 
   # SERVICE OBJECTS
     - name: K8s API Port
@@ -117,6 +109,33 @@
       register: return
 
     # NETWORK ADDRESS TRANSLATION
+    - name: Get a GigabitEthernet0/0 Interface
+      ftd_configuration:
+        operation: getPhysicalInterfaceList
+        filters:
+          hardwareName: GigabitEthernet0/0
+        register_as: interface0
+
+    - name: Get a GigabitEthernet0/1 Interface
+      ftd_configuration:
+        operation: getPhysicalInterfaceList
+        filters:
+          hardwareName: GigabitEthernet0/1
+        register_as: interface1
+
+    - name: Get Ojbect K8s_Clusters
+      ftd_configuration:
+        operation: getNetworkObjectList
+        filters:
+          name: K8s_Clusters
+        register_as: K8s_Clusters
+    - name: Get Ojbect K8s_ext
+      ftd_configuration:
+        operation: getNetworkObjectList
+        filters:
+          name: K8s_ext
+        register_as: K8s_ext
+
     - name: Get Object NAT Policy
       ftd_configuration:
         operation: getObjectNatRuleContainerList
@@ -124,13 +143,14 @@
       register: return
     - debug:
         var: container_results
+
     - name: K8S CLUSTER NAT
       ftd_configuration:
         operation: "upsertObjectNatRule"
         data:
           name: "K8s_Nat"
-          sourceInterface: GigabitEthernet0/0
-          destinationInterface: GigabitEthernet0/1
+          sourceInterface: "{{ interface0[0] }}"
+          destinationInterface: "{{ interface0[0] }}"
           natType: "STATIC"
           netToNet: "false"
           noProxyArp: "false"
@@ -138,8 +158,8 @@
           interfaceIPv6: "false"
           routeLookup: "false"
           enabled: "true"
-          originalNetwork: K8s_Cluster
-          translatedNetwork: K8s_ext
+          originalNetwork: "{{ K8s_Cluster[0] }}"
+          translatedNetwork: "{{ K8s_ext[0] }}"
           interfaceInTranslatedNetwork: "false"
           type: "objectnatrule"
         path_params:
