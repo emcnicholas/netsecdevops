@@ -112,7 +112,7 @@
         data:
           name: "my-python-app"
           description: "my-python-app service-node port"
-          port: "16443"
+          port: "30677"
           type: "tcpportobject"
         register_as: "my-python-app"
       register: return
