@@ -55,7 +55,6 @@
       register: return
     - debug:
         var: inside_int
-
     # NETWORK OBJECTS
     - name: Remote Site Host
       ftd_configuration:
@@ -66,6 +65,10 @@
           subType: "HOST"
           value: "100.11.24.44"
           type: "networkobject"
+        register_as: "remote_site"
+      register: return
+    - debug:
+        var: remote_site
 
     - name: K8s Cluster Host
       ftd_configuration:
@@ -106,6 +109,9 @@
           type: "tcpportobject"
         register_as: "k8s_api"
       register: return
+    - debug:
+        var: k8s_api
+
     - name: My-Python-App Port
       ftd_configuration:
         operation: 'upsertTCPPortObject'
@@ -114,8 +120,22 @@
           description: "my-python-app service-node port"
           port: "30677"
           type: "tcpportobject"
-        register_as: "my-python-app"
+        register_as: "my_python_app"
       register: return
+    - debug:
+        var: my_python_app
+
+    - name: SSH
+      ftd_configuration:
+        operation: 'upsertTCPPortObject'
+        data:
+          name: "SSH"
+          port: "22"
+          type: "tcpportobject"
+        register_as: "ssh"
+      register: return
+    - debug:
+        var: ssh
 
     # NETWORK ADDRESS TRANSLATION
     - name: Get Object NAT Policy
@@ -153,3 +173,119 @@
           type: "objectnatrule"
         path_params:
           parentId: "{{ container_results[0].id}}"
+
+    #SECURITY ZONES
+    - name: Inside Security Zone
+      ftd_configuration:
+        operation: "upsertSecurityZone"
+        data:
+          name: "inside_zone"
+          interfaces:
+            - name: "inside"
+              hardwareName: "GigabitEthernet0/0"
+              id: "{{ inside_int.id }}"
+              type: "physicalinterface"
+          mode: "ROUTED"
+          type: "securityzone"
+        register_as: "inside_zone"
+      register: return
+    - debug:
+        var: inside_zone
+    - name: Outside Security Zone
+      ftd_configuration:
+        operation: "upsertSecurityZone"
+        data:
+          name: "outside_zone"
+          interfaces:
+            - name: "outside"
+              hardwareName: "GigabitEthernet0/1"
+              id: "{{ outside_int.id }}"
+              type: "physicalinterface"
+          mode: "ROUTED"
+          type: "securityzone"
+        register_as: "outside_zone"
+      register: return
+    - debug:
+        var: outside_zone
+
+    # ACCESS POLICY
+    - name: NGFW Access Policy
+      ftd_configuration:
+        operation: "getAccessPolicyList"
+        register_as: "access_policy"
+      register: return
+    - debug:
+        var: access_policy
+
+    # ACCESS RULES
+    - name: K8s API Access Rule
+      ftd_configuration:
+        operation: upsertAccessRule
+        data:
+          name: secure_workload
+          sourceZones:
+            - name: outside_zone
+              id: "{{ outside_zone.id }}"
+              type: securityzone
+          destinationZones:
+            - name: inside_zone
+              id: "{{ inside_zone.id }}"
+              type: securityzone
+          sourceNetworks: [ ]
+          destinationNetworks:
+            - name: K8s_Cluster
+              id: "{{ K8s_Cluster.id }}"
+              type: networkobject
+            - name: K8s_ext
+              id: "{{ K8s_ext.id }}"
+              type: networkobject
+          sourcePorts: [ ]
+          destinationPorts:
+            - name: k8_api
+              id: "{{ k8s_api.id }}"
+              type: tcpportobject
+          ruleAction: PERMIT
+          eventLogAction: LOG_NONE
+          type: accessrule
+        path_params:
+          parentId: "{{ access_policy[0].id}}"
+    - name: K8s_Inbound Access Rule
+      ftd_configuration:
+        operation: upsertAccessRule
+        data:
+          name: K8s_Inbound
+          sourceZones:
+            - name: outside_zone
+              id: "{{ outside_zone.id }}"
+              type: securityzone
+          destinationZones:
+            - name: inside_zone
+              id: "{{ inside_zone.id }}"
+              type: securityzone
+          sourceNetworks:
+            - name: remote_site
+              id: "{{ remote_site.id }}"
+              type: networkobject
+          destinationNetworks:
+            - name: K8s_Cluster
+              id: "{{ K8s_Cluster.id }}"
+              type: networkobject
+            - name: K8s_ext
+              id: "{{ K8s_ext.id }}"
+              type: networkobject
+          sourcePorts: [ ]
+          destinationPorts:
+            - name: k8s_api
+              id: "{{ k8s_api.id }}"
+              type: tcpportobject
+            - name: my-python-app
+              id: "{{ my_python_app.id }}"
+              type: tcpportobject
+            - name: SSH
+              id: "{{ ssh.id }}"
+              type: tcpportobject
+          ruleAction: PERMIT
+          eventLogAction: LOG_BOTH
+          type: accessrule
+        path_params:
+          parentId: "{{ access_policy[0].id}}"
